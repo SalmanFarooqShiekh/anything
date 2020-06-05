@@ -7,6 +7,8 @@ import time
 import sys
 import os
 
+display_alert("quipt started", blocking=False)
+
 # Purpose of this script: It is meant to be run in the background and it will be watching a folder. 
 # If anything pops up in that folder, it will be forwarded to the physical printer after processing it.
 # The folder being watched is where the Quipt Virtual Printer will be saving the documents.
@@ -16,10 +18,10 @@ import os
 # Accompanying VP: https://github.com/rodyager/RWTS-PDFwriter
 
 # Script Options:
-QUIPT_VP_DESTINATION_FOLDER_PATH    = r"/private/var/spool/pdfwriter/apple"
+QUIPT_VP_DESTINATION_FOLDER_PATH    = r"./quipt_virtual_printer_target"
 SPLIT_QUIPT_PDF_TARGET              = r"./split_quipt_pdf_target/"
 
-USE_LOG_FILE                        = True # if False, print log to the the stdout which is usually the terminal 
+USE_LOG_FILE                        = False # if False, print log to the the stdout which is usually the terminal 
 LOG_FILE_PATH                       = "./" + __file__ + ".log"
 
 PRINT_TO_PHYSICAL_PRINTER           = False
@@ -66,14 +68,17 @@ class QuiptWatcher:
 class QuiptPDFHandler(FileSystemEventHandler):
     @staticmethod
     def on_created(event):
+        path_to_source_pdf = event.src_path
+
         # When _PDFwriter_ (https://github.com/rodyager/RWTS-PDFwriter) starts "printing" the pdf to the 
         # folder, this method is fired before PDFwriter completes writing the pdf. So we add some
         # delay to give (more than) enough time to PDFwriter to complete writing the pdf.
+        print(timestamp() + ": Started receiving Quipt-PDF at: '" + path_to_source_pdf + "'", flush=True)
+        print(timestamp() + ": Waiting for " + str(WAIT_TIME_DUE_TO_VP_SAVING_THE_FILE) + " seconds to complete the reception...", flush=True)
         time.sleep(WAIT_TIME_DUE_TO_VP_SAVING_THE_FILE)
         
         # From here on, you can (with very high probability) safely do whatever you want with the source pdf:
-        path_to_source_pdf = event.src_path
-        print(timestamp() + ": Quipt-PDF received at: '" + path_to_source_pdf + "'", flush=True)
+        print(timestamp() + ": Done waiting. Splitting Quipt-PDF received at: '" + path_to_source_pdf + "'", flush=True)
 
         # create it if it doesn't exist already
         if not os.path.exists(SPLIT_QUIPT_PDF_TARGET):
@@ -115,8 +120,14 @@ class QuiptPDFHandler(FileSystemEventHandler):
 
 
         # delete source pdf
-        os.remove(path_to_source_pdf)
-        print(timestamp() + ": Received PDF at path deleted: '" + path_to_source_pdf + "'", flush=True)
+        try:
+            os.remove(path_to_source_pdf)
+            print(timestamp() + ": Received PDF at path deleted: '" + path_to_source_pdf + "'", flush=True)
+        except Exception as exp:
+            error_msg =  timestamp() + ": " + __file__ + ": error while deleting source pdf at: '" + path_to_source_pdf + "'"
+            print(error_msg, flush=True)
+            display_alert(error_msg, blocking=False)
+
         print(timestamp() + ready_text, flush=True)
 
         
