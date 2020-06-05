@@ -1,0 +1,40 @@
+-- (*
+
+-- Specs:
+
+-- name=QuiptControlPanel.app
+
+-- 1. Simple  popup with 3 buttons comes up and it does (start_daemon())
+
+-- Select 1, 2, 3, 4, or 5 from dropdown to launch:
+
+-- 1: status|no_input_dialogue = indicates if the quipt daemon is alive or not
+-- 2: re/start|single_button_dialogue = kill_if_alive(); start_daemon()
+-- 3: stop|button = kill_if_alive()
+-- 4: launch on login|checkbox = onCHECK(add app to login items); onUNCHECK(remove app from login items)
+-- 5: help|button = show help text in new window
+
+
+
+
+
+-- func start_daemon():
+--    if !RUNNING: 
+--       (start daemon in background)
+
+-- func kill_if_alive():
+--    if RUNNING: 
+--       (kill quipt daemon)
+
+-- *)
+
+-- (*
+-- set appPath to POSIX path of alias "Macintosh HD:Applications:Sublime Text.app"
+set appPath to POSIX path of alias "Macintosh HD:Applications:MacDown.app"
+tell application "System Events"
+   make login item at end with properties {path:appPath, hidden:false}
+end tell
+-- *)
+
+-- set theDialogText to "<question>"
+-- display dialog theDialogText buttons {"no", "yes", "idk"} default button "yes" cancel button "no"

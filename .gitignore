@@ -1,0 +1,6 @@
+.DS_Store
+quipt.py.log
+.vscode/
+env/
+__pycache__/
+split_quipt_pdf_target/

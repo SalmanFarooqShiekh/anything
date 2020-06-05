@@ -1,0 +1,7 @@
+Priority-wise:
+
+1. VipRiser
+2. https://github.com/rodyager/RWTS-PDFwriter
+3. https://sourceforge.net/projects/pdfwriterformac
+4. CUPS-PDF
+5. PDF Printer from OSX App Store

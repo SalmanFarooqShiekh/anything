@@ -1,0 +1,9 @@
+ 0. Copy `code` folder to the print server after deleting unneeded files.
+ 1. Install Homebrew: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+ 2. Install python3(yes 3): brew install python(no 3)
+ 3. Install `virtualenv`: pip3 install virtualenv
+ 4. Create `env` in `code` folder copied int step 0: virtualenv destination/path/for/yourenv
+ 5. Activate `env`.
+ 6. Install requirements: pip3 install -r requirements.txt
+ 7. Run quipt.py: python3 quipt.py
+ 8. Test EVERYTHING.
