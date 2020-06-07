@@ -4,3 +4,4 @@ quipt.py.log
 env/
 __pycache__/
 split_quipt_pdf_target/
+resources/big.pdf
